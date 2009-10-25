@@ -60,13 +60,16 @@ def download(uri, dest):
 
 def expand(filepath, projectname):
     if not tarfile.is_tarfile(filepath):
-        print 'Not a archive file.'
+        print 'Not a tar.gz archive file.'
         return
     print 'Extracting tar.gz...'
     basename = filepath[:filepath.rfind('/') + 1]
 
     tarhandler = tarfile.open(filepath, 'r')
     dirname = tarhandler.getmembers()[0].name if len(tarhandler.getmembers()) > 0 else ''
+    if dirname == '':
+        print 'Fail to get tar file member.'
+        return
     tarhandler.extractall()
 #    for item in tarhandler:
 #        print item.name
@@ -77,5 +80,4 @@ def expand(filepath, projectname):
     if os.path.exists(dirname):
         shutil.move(dirname, basename + projectname)
     print 'Done...'
-
     return
