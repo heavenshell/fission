@@ -1,6 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf_8 -*-
+#
+# Download arhive from Github
+#
+# Copyright (c) 2009 Shinya Ohyanagi, All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#
+#   * Neither the name of Shinya Ohyanagi nor the names of his
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
 from paver.easy import *
+from datetime import datetime
 import os
 import sys
 import urllib
@@ -40,7 +75,6 @@ def install(options):
         projectname = options['projectname']
     except KeyError:
         pass
-
     dest += projectname + '.tar.gz'
 
     download(uri, dest)
@@ -49,11 +83,12 @@ def install(options):
 def _reporthook(blocknum, bs, size):
     filesize = blocknum * bs * 100 / size
     filesize = filesize if filesize < 100 else 100
-    sys.stdout.write("Download %4d%%\r" % filesize)
+    sys.stdout.write("Now downloading... %4d%%\r" % filesize)
     sys.stdout.flush()
 
 def download(uri, dest):
     uri = GITHUB_URI + uri + '/tarball/master'
+    print datetime.now()
     print 'Download archive from: ' + uri
     urllib.urlretrieve(uri, dest, _reporthook)
     print
@@ -62,22 +97,23 @@ def expand(filepath, projectname):
     if not tarfile.is_tarfile(filepath):
         print 'Not a tar.gz archive file.'
         return
-    print 'Extracting tar.gz...'
+    print 'Extracting ' + filepath
     basename = filepath[:filepath.rfind('/') + 1]
 
-    tarhandler = tarfile.open(filepath, 'r')
-    dirname = tarhandler.getmembers()[0].name if len(tarhandler.getmembers()) > 0 else ''
+    tar = tarfile.open(filepath, 'r')
+    dirname = tar.getmembers()[0].name if len(tar.getmembers()) > 0 else ''
     if dirname == '':
         print 'Fail to get tar file member.'
         return
-    tarhandler.extractall()
-#    for item in tarhandler:
+    tar.extractall()
+#    for item in tar:
 #        print item.name
 #        tarhandler.extract(item)
 
-    tarhandler.close()
+    tar.close()
     dirname = basename + dirname
     if os.path.exists(dirname):
         shutil.move(dirname, basename + projectname)
+        os.remove(filepath);
     print 'Done...'
     return
