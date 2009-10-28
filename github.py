@@ -42,7 +42,7 @@ import urllib
 import tarfile
 import shutil
 
-GITHUB_URI = 'http://github.com/'
+GITHUB_URI = 'http://github.com'
 
 @task
 @cmdopts([
@@ -52,10 +52,14 @@ GITHUB_URI = 'http://github.com/'
 ])
 def install(options):
     """
-    Download tarball github project's master archive.
+    Download tar.gz file from github project's master and extract to dest path.
 
     Usage:
-        >>> paver -f /path/to/github.py install -u username/projectname
+      >>> paver -f /path/to/github.py install -u user/project
+      >>> paver -f /path/to/github.py install -u user/project -d /path/to/dest
+      >>> paver -f /path/to/github.py install -u user/project -p Projectname
+    Arguments:
+      options -- Command line options.
     """
     try:
         uri = options['uri']
@@ -63,11 +67,14 @@ def install(options):
         print 'Uri does not set. Done...'
         return
 
-    dest = os.getcwd() + '/'
+    dest = os.getcwd()
     try:
         dest = options['dest']
     except KeyError:
         pass
+
+    if dest.endswith('/') == False:
+        dest += '/'
 
     lists = uri.split('/')
     projectname = lists[len(lists) - 1]
@@ -87,6 +94,9 @@ def _reporthook(blocknum, bs, size):
     sys.stdout.flush()
 
 def download(uri, dest):
+    if not uri.startswith('/'):
+        uri = '/' + uri
+
     uri = GITHUB_URI + uri + '/tarball/master'
     print datetime.now()
     print 'Download archive from: ' + uri
@@ -99,6 +109,7 @@ def expand(filepath, projectname):
         return
     print 'Extracting ' + filepath
     basename = filepath[:filepath.rfind('/') + 1]
+    os.chdir(basename)
 
     tar = tarfile.open(filepath, 'r')
     dirname = tar.getmembers()[0].name if len(tar.getmembers()) > 0 else ''
@@ -108,12 +119,15 @@ def expand(filepath, projectname):
     tar.extractall()
 #    for item in tar:
 #        print item.name
-#        tarhandler.extract(item)
+#        tar.extract(item)
 
     tar.close()
     dirname = basename + dirname
     if os.path.exists(dirname):
-        shutil.move(dirname, basename + projectname)
+        ret = shutil.move(dirname, basename + projectname)
         os.remove(filepath);
+
+
+
     print 'Done...'
     return
