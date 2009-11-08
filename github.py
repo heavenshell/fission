@@ -34,7 +34,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from paver.easy import *
+from paver.easy import task, cmdopts
 from datetime import datetime
 import os
 import sys
@@ -126,8 +126,6 @@ def expand(filepath, projectname):
     if os.path.exists(dirname):
         ret = shutil.move(dirname, basename + projectname)
         os.remove(filepath);
-
-
 
     print 'Done...'
     return
