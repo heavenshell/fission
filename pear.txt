@@ -1,0 +1,37 @@
+Benchmark
+Cache_Lite
+File
+HTML_Template_Flexy
+HTTP_Client
+HTTP_Request
+HTTP_Request2-alpha
+Net_UserAgent_Mobile
+Pager
+Cache
+DB
+DB_DataObject
+HTML_QuickForm
+SOAP-beta
+XML_Parser
+XML_RSS-beta
+Net_URL
+Net_URL2-beta
+Net_URL_Mapper-beta
+pear/Image_GraphViz
+pear/Log
+Console_Color
+channel-discover openpear.org
+openpear/Db_Fixture-beta
+openpear/Net_URL_Dispatcher-beta
+openpear/Date_Japanese_Era-beta
+channel-discover pear.phpunit.de
+phpunit/PHPUnit
+channel-discover pear.phpspec.org
+phpspec/PHPSpec
+pear/Net_Growl-beta
+channel-discover pear.piece-framework.com
+piece/Stagehand_AccessControl-beta
+piece/Stagehand_CLIController-beta
+piece/Stagehand_Autoload-beta
+piece/Stagehand_LegacyError
+piece/Stagehand_Testrunner
