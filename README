@@ -6,7 +6,7 @@ This repos is a bunch of paver scripts.
 ** github.py
 Download github project's latest tar.gz archive and extract tar.gz file.
 
-** Usages
+*** Usages
 paver -f /path/to/github.py install heavenshell/gene
 - Download http://github.com/heavenshell/gene latest tar.gz file.
 - Extract downloaded tar.gz file to current direcotry.
@@ -19,3 +19,9 @@ paver -f /path/to/github.py install heavenshell/gene -d /dest/path -p Projectnam
 - Download http://github.com/heavenshell/gene latest tar.gz file.
 - Extract downloaded tar.gz file to dest direcotry.
 - Change project name to given name.
+
+** pear.py
+Install PHP's PEAR package.
+
+*** Usages
+paver -f /path/to/pear.py install -l /path/to/pear.txt
