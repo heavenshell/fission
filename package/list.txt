@@ -1,0 +1,7 @@
+#
+# Download from, Install to, project name, copy file or direcoty
+#
+http://github.com/heavenshell/gene/tarball/master, /Volumes/Data1/src/lang/php/sandbox, shophub
+http://github.com/heavenshell/zf-resources-lang-ja/tarball/master, /Volumes/Data1/src/lang/php/sandbox/shophub/app/resources/languages/ja, , Zend_Validate.php
+http://framework.zend.com/releases/ZendFramework-1.10.1/ZendFramework-1.10.1-minimal.tar.gz, /Volumes/Data1/src/lang/php/sandbox, shophub, bin library/Zend
+http://download.revulo.com/ZendFramework/Revulo_View_Phtmlc-0.6.tar.gz, /Volumes/Data1/src/lang/php/sandbox/shophub/library/Revulo/View/Phtmlc.php
