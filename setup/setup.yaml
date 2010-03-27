@@ -1,0 +1,14 @@
+options:
+  build: '/tmp/buid'
+  repository: 'http://localhost'
+
+task:
+  - date:
+    - 'date'
+  - ruby:
+    - 'ruby -v'
+  - perl:
+    - 'perl -v'
+  - php:
+    - 'php -v'
+
