@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Run dsl command
+# Run command which is written in dsl.
 #
 # Copyright (c) 2009-2010 Shinya Ohyanagi, All rights reserved.
 #
@@ -36,11 +36,17 @@
 #
 from paver.easy import task, cmdopts, sh
 import yaml
+import os
 
 class Assemble(object):
     """
+    Run commands written in yaml file.
     """
     def __init__(self, options):
+        """
+        Get yaml file and command line options.
+        """
+
         self.options = options
         self.yamlfile = './setup.yaml'
         self.command = None
@@ -55,6 +61,9 @@ class Assemble(object):
             pass
 
     def parse(self, filepath=None):
+        """
+        Parse yaml file.
+        """
         if not filepath == None:
             self.yamlfile = filepath
         self.config = yaml.load(open(self.yamlfile))
@@ -62,24 +71,32 @@ class Assemble(object):
         return self
 
     def run(self):
+        """
+        Run command.
+        """
         configs = self.config or {}
         options = configs['options']
-        self.tasks = configs['task']
-        for task in self.tasks:
-            self.execute(task)
+        if not options.get('build', None) == None:
+            buildpath = options.get('build', None)
+            print buildpath
+            if not os.path.isdir(buildpath):
+                os.makedirs(buildpath)
+            os.chdir(buildpath)
 
-    def execute(self, tasks):
-        def _execute(task):
-            for task, commands in tasks.iteritems():
-                for command in commands:
-                    sh(command)
+        self.tasks = configs['task']
+
+        _execute = lambda tasks : [
+            sh(command) for task, commands in tasks.iteritems() for command in commands
+        ]
 
         if self.command == None:
-            _execute(tasks)
+            for task in self.tasks:
+                _execute(task)
         else:
             for command in self.command:
-                if tasks.get(command, None) != None:
-                    _execute(tasks.get(command))
+                for task in self.tasks:
+                    if not task.get(command, None) == None:
+                        _execute(task)
         return self
 
 @task
@@ -88,5 +105,4 @@ class Assemble(object):
     ('command=', 'c', 'Run commands.'),
 ])
 def task(options):
-    assemble = Assemble(options)
-    assemble.parse().run()
+    Assemble(options).parse().run()
