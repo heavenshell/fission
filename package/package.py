@@ -1,39 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Download arhive from Github
-#
-# Copyright (c) 2009-2010 Shinya Ohyanagi, All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-#   * Redistributions of source code must retain the above copyright
-#     notice, this list of conditions and the following disclaimer.
-#
-#   * Redistributions in binary form must reproduce the above copyright
-#     notice, this list of conditions and the following disclaimer in
-#     the documentation and/or other materials provided with the
-#     distribution.
-#
-#   * Neither the name of Shinya Ohyanagi nor the names of his
-#     contributors may be used to endorse or promote products derived
-#     from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
+
+"""
+    fission.package
+    ~~~~~~~~~~~~~~
+
+    Download and expand tar.gz file.
+
+    :copyright: (c) 2010 Shinya Ohyanagi, All rights reserved.
+    :license: BSD, see LICENSE for more details.
+"""
+
+
 from paver.easy import task, cmdopts, path, sh
 from datetime import datetime
 import os
@@ -48,9 +26,10 @@ def _reporthook(blocknum, bs, size):
     Callback function for show download progress.
 
     Arguments:
-        blocknum -- Download block file number
-        bs -- Block size
-        size -- Package size
+
+    * blocknum: Download block file number
+    * bs: Block size
+    * size: Package size
     """
     filesize = blocknum * bs * 100 / size
     filesize = filesize if filesize < 100 else 100
@@ -62,8 +41,9 @@ def _download(uri, dest):
     Download package file
 
     Arguments:
-        uri -- Package file uri
-        dest -- Path to download
+
+    * uri: Package file uri
+    * dest: Path to download
     """
 
     print 'Download archive from: ' + uri
@@ -75,9 +55,11 @@ def _expand(filepath):
     Extract tar or zip file.
 
     Arguments:
-        filepath -- Path to tar/zip file
+
+    * filepath: Path to tar/zip file
+
     Return:
-        Extract archive path
+    * Extract archive path
     """
 
     if tarfile.is_tarfile(filepath):
@@ -113,10 +95,11 @@ def move(source, dest, projectname, targets):
     Move files to dest path
 
     Arguments:
-        source -- From
-        dest -- To
-        projectname -- Replace directory/file name
-        targets --
+
+    * source: From
+    * dest: To
+    * projectname: Replace directory/file name
+    * targets --
     """
     if projectname == '' and targets == '':
         filepath, ext = os.path.splitext(dest)
@@ -144,8 +127,9 @@ def _execute(text, buildpath):
     Download packages, extract files and move to dest path.
 
     Arguments:
-        text -- Package uri, dest path, package name, target files to move.
-        buildpath -- Path to download direcotry
+
+    * text: Package uri, dest path, package name, target files to move.
+    * buildpath: Path to download direcotry
     """
 
     if text.startswith('#'):
@@ -176,9 +160,10 @@ def _execute(text, buildpath):
 @cmdopts([('list=', 'l', 'Path to pear package list file.')])
 def install(options):
     """
-      Download packages from list.
+    Download packages from list.
 
-      >>> paver -f package.py install -l list.txt
+    Usage:
+        >>> paver -f package.py install -l list.txt
     """
     print datetime.now().strftime('%Y/%m/%d %H:%M:%S')
     try:
