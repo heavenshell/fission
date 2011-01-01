@@ -6,7 +6,7 @@
 
     Run command which is written in dsl.
 
-    :copyright: (c) 2010 Shinya Ohyanagi, All rights reserved.
+    :copyright: (c) 2010-2011 Shinya Ohyanagi, All rights reserved.
     :license: BSD, see LICENSE for more details.
 """
 from paver.easy import task, cmdopts, sh
